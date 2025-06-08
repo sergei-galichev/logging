@@ -21,36 +21,51 @@ const (
 	// LevelError is the error log level (highest level)
 	LevelError = slog.LevelError
 
-	TimeKey    = slog.TimeKey
-	SourceKey  = slog.SourceKey
+	// TimeKey is the key used for timestamps in log records
+	TimeKey = slog.TimeKey
+
+	// SourceKey is the key used for source location information
+	SourceKey = slog.SourceKey
+
+	// MessageKey is the key used for log messages
 	MessageKey = slog.MessageKey
-	LevelKey   = slog.LevelKey
+
+	// LevelKey is the key used for log levels
+	LevelKey = slog.LevelKey
 )
 
-// Type aliases for slog types
+// Level is an alias for slog.Level representing log level severity.
+// It follows the same values as the level constants (Debug, Info, Warn, Error).
 type (
-	// Attr is an alias for slog.Attr, representing a key-value pair
-	// in structured logging
-	Attr = slog.Attr
-
 	Level = slog.Level
 )
 
+// Commonly used attribute constructors that mirror slog's functions
 var (
-	/*
-		Attribute functions for common types
-	*/
+	// Bool creates a boolean-valued attribute
+	Bool = slog.Bool
 
-	Bool    = slog.Bool
-	String  = slog.String
-	Int     = slog.Int
-	Int64   = slog.Int64
+	// String creates a string-valued attribute
+	String = slog.String
+
+	// Int creates an integer-valued attribute
+	Int = slog.Int
+
+	// Int64 creates a 64-bit integer-valued attribute
+	Int64 = slog.Int64
+
+	// Time creates a time.Time-valued attribute
+	Time = slog.Time
+
+	// Duration creates a time.Duration-valued attribute
+	Duration = slog.Duration
+
+	// Float64 creates a 64-bit floating-point-valued attribute
 	Float64 = slog.Float64
-	Any     = slog.Any
-	Dict    = slog.Group
 
-	NewLogLogger   = slog.NewLogLogger
-	NewTextHandler = slog.NewTextHandler
-	NewJSONHandler = slog.NewJSONHandler
-	SetDefault     = slog.SetDefault
+	// Any creates an attribute of any type
+	Any = slog.Any
+
+	// Dict creates a group of attributes (alias for slog.Group)
+	Dict = slog.Group
 )

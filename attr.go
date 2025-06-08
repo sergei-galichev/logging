@@ -11,7 +11,7 @@ import (
 // key: The attribute key
 // val: Pointer to boolean value. If nil, the attribute will be logged as "nil"
 // Returns: A structured log attribute
-func BoolPtr(key string, val *bool) Attr {
+func BoolPtr(key string, val *bool) slog.Attr {
 	if val == nil {
 		return slog.String(key, "nil")
 	}
@@ -23,7 +23,7 @@ func BoolPtr(key string, val *bool) Attr {
 // key: The attribute key
 // val: Pointer to string value. If nil, the attribute will be logged as "nil"
 // Returns: A structured log attribute
-func StringPtr(key string, val *string) Attr {
+func StringPtr(key string, val *string) slog.Attr {
 	if val == nil {
 		return slog.String(key, "nil")
 	}
@@ -35,7 +35,7 @@ func StringPtr(key string, val *string) Attr {
 // key: The attribute key
 // val: Pointer to integer value. If nil, the attribute will be logged as "nil"
 // Returns: A structured log attribute
-func IntPtr(key string, val *int) Attr {
+func IntPtr(key string, val *int) slog.Attr {
 	if val == nil {
 		return slog.String(key, "nil")
 	}
@@ -47,7 +47,7 @@ func IntPtr(key string, val *int) Attr {
 // key: The attribute key
 // val: The int32 value
 // Returns: A structured log attribute
-func Int32(key string, val int32) Attr {
+func Int32(key string, val int32) slog.Attr {
 	return slog.Int(key, int(val))
 }
 
@@ -55,7 +55,7 @@ func Int32(key string, val int32) Attr {
 // key: The attribute key
 // val: Pointer to int32 value. If nil, the attribute will be logged as "nil"
 // Returns: A structured log attribute
-func Int32Ptr(key string, val *int32) Attr {
+func Int32Ptr(key string, val *int32) slog.Attr {
 	if val == nil {
 		return slog.String(key, "nil")
 	}
@@ -67,7 +67,7 @@ func Int32Ptr(key string, val *int32) Attr {
 // key: The attribute key
 // val: Pointer to int64 value. If nil, the attribute will be logged as "nil"
 // Returns: A structured log attribute
-func Int64Ptr(key string, val *int64) Attr {
+func Int64Ptr(key string, val *int64) slog.Attr {
 	if val == nil {
 		return slog.String(key, "nil")
 	}
@@ -75,11 +75,39 @@ func Int64Ptr(key string, val *int64) Attr {
 	return slog.Int64(key, *val)
 }
 
+// Uint creates an attribute from a uint value.
+// key: The attribute key
+// val: The uint value
+// Returns: A structured log attribute
+func Uint(key string, val uint) slog.Attr {
+	return slog.Uint64(key, uint64(val))
+}
+
+// Uint32 creates an attribute from a uint32 value.
+// key: The attribute key
+// val: The uint32 value
+// Returns: A structured log attribute
+func Uint32(key string, val uint32) slog.Attr {
+	return slog.Uint64(key, uint64(val))
+}
+
+// Uint32Ptr creates an attribute from a uint32 pointer.
+// key: The attribute key
+// val: Pointer to uint32 value. If nil, the attribute will be logged as "nil"
+// Returns: A structured log attribute
+func Uint32Ptr(key string, val *uint32) slog.Attr {
+	if val == nil {
+		return slog.String(key, "nil")
+	}
+
+	return slog.Uint64(key, uint64(*val))
+}
+
 // Float32 creates an attribute from a float32 value.
 // key: The attribute key
 // val: The float32 value
 // Returns: A structured log attribute
-func Float32(key string, val float32) Attr {
+func Float32(key string, val float32) slog.Attr {
 	return slog.Float64(key, float64(val))
 }
 
@@ -87,7 +115,7 @@ func Float32(key string, val float32) Attr {
 // key: The attribute key
 // val: Pointer to float32 value. If nil, the attribute will be logged as "nil"
 // Returns: A structured log attribute
-func Float32Ptr(key string, val *float32) Attr {
+func Float32Ptr(key string, val *float32) slog.Attr {
 	if val == nil {
 		return slog.String(key, "nil")
 	}
@@ -99,7 +127,7 @@ func Float32Ptr(key string, val *float32) Attr {
 // key: The attribute key
 // val: Pointer to float64 value. If nil, the attribute will be logged as "nil"
 // Returns: A structured log attribute
-func Float64Ptr(key string, val *float64) Attr {
+func Float64Ptr(key string, val *float64) slog.Attr {
 	if val == nil {
 		return slog.String(key, "nil")
 	}
@@ -111,7 +139,7 @@ func Float64Ptr(key string, val *float64) Attr {
 // Handles nil errors by logging "nil" as the error value.
 // err: The error to log
 // Returns: A structured log attribute with key "error"
-func Error(err error) Attr {
+func Error(err error) slog.Attr {
 	if err == nil {
 		return slog.String("error", "nil")
 	}
