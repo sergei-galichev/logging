@@ -38,6 +38,8 @@ const (
 // It follows the same values as the level constants (Debug, Info, Warn, Error).
 type (
 	Level = slog.Level
+
+	Logger = slog.Logger
 )
 
 // Commonly used attribute constructors that mirror slog's functions
@@ -68,4 +70,7 @@ var (
 
 	// Dict creates a group of attributes (alias for slog.Group)
 	Dict = slog.Group
+
+	// Default is the default logger
+	Default = slog.Default
 )
