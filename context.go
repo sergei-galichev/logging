@@ -2,7 +2,6 @@ package logging
 
 import (
 	"context"
-	"log/slog"
 )
 
 // loggerKey is a private type used as unique context key to store logger instances.
@@ -24,7 +23,7 @@ type loggerKey struct{}
 //	logger := slog.New(...)
 //	ctx := ContextWithLogger(context.Background(), logger)
 //	// Pass ctx through function calls
-func ContextWithLogger(ctx context.Context, logger *slog.Logger) context.Context {
+func ContextWithLogger(ctx context.Context, logger *Logger) context.Context {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -46,10 +45,10 @@ func ContextWithLogger(ctx context.Context, logger *slog.Logger) context.Context
 //
 //	logger := LoggerFromContext(ctx)
 //	logger.Info("processing request")
-func LoggerFromContext(ctx context.Context) *slog.Logger {
-	if logger, ok := ctx.Value(loggerKey{}).(*slog.Logger); ok {
+func LoggerFromContext(ctx context.Context) *Logger {
+	if logger, ok := ctx.Value(loggerKey{}).(*Logger); ok {
 		return logger
 	}
 
-	return DefaultLogger()
+	return &Logger{DefaultLogger()}
 }

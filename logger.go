@@ -175,6 +175,10 @@ func (l *Logger) FatalContext(ctx context.Context, msg string, args ...any) {
 	os.Exit(1)
 }
 
+func (l *Logger) L() *slog.Logger {
+	return l.Logger
+}
+
 func logWithSkip(ctx context.Context, l *slog.Logger, skip int, level Level, msg string, args ...any) {
 	var pcs [1]uintptr
 
