@@ -18,8 +18,11 @@ const (
 	// LevelWarn is the warning log level
 	LevelWarn = slog.LevelWarn
 
-	// LevelError is the error log level (highest level)
+	// LevelError is the error log level
 	LevelError = slog.LevelError
+
+	// LevelFatal is the fatal log level
+	LevelFatal = slog.Level(12)
 
 	// TimeKey is the key used for timestamps in log records
 	TimeKey = slog.TimeKey
@@ -38,8 +41,6 @@ const (
 // It follows the same values as the level constants (Debug, Info, Warn, Error).
 type (
 	Level = slog.Level
-
-	Logger = slog.Logger
 )
 
 // Commonly used attribute constructors that mirror slog's functions
@@ -70,7 +71,4 @@ var (
 
 	// Dict creates a group of attributes (alias for slog.Group)
 	Dict = slog.Group
-
-	// Default is the default logger
-	Default = slog.Default
 )

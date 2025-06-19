@@ -25,18 +25,22 @@ type loggerKey struct{}
 //	ctx := ContextWithLogger(context.Background(), logger)
 //	// Pass ctx through function calls
 func ContextWithLogger(ctx context.Context, logger *slog.Logger) context.Context {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
 	return context.WithValue(ctx, loggerKey{}, logger)
 }
 
 // LoggerFromContext extracts a logger from the context.
-// Returns the default logger (slog.Default()) if no logger is found in context.
+// Returns the default logger ([DefaultLogger]) if no logger is found in context.
 // This provides a safe way to retrieve loggers that always returns a valid logger instance.
 //
 // Parameters:
 //   - ctx: context containing the logger
 //
 // Returns:
-//   - *slog.Logger from context or slog.Default() as fallback
+//   - *slog.Logger from context or [DefaultLogger] as fallback
 //
 // Example:
 //
@@ -46,5 +50,6 @@ func LoggerFromContext(ctx context.Context) *slog.Logger {
 	if logger, ok := ctx.Value(loggerKey{}).(*slog.Logger); ok {
 		return logger
 	}
-	return slog.Default()
+
+	return DefaultLogger()
 }

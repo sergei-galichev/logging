@@ -5,12 +5,15 @@
 package logging
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"maps"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
+	"time"
 )
 
 const (
@@ -84,6 +87,8 @@ func (o *Options) replaceAttr(groups []string, a slog.Attr) slog.Attr {
 	if newKey, ok := o.ReplaceAttrs[a.Key]; ok {
 		if a.Key == slog.SourceKey && o.AddShortSource {
 			return o.shortSourceAttr(a, newKey)
+		} else if a.Key == slog.LevelKey {
+			return o.replaceLevel(a, "FATAL")
 		}
 
 		return slog.Attr{
@@ -95,10 +100,27 @@ func (o *Options) replaceAttr(groups []string, a slog.Attr) slog.Attr {
 	return a
 }
 
+func (o *Options) replaceLevel(a slog.Attr, levelName string) slog.Attr {
+	if lvl, ok := a.Value.Any().(slog.Level); ok {
+		if lvl == LevelFatal {
+			return slog.Attr{
+				Key:   slog.LevelKey,
+				Value: slog.StringValue(levelName),
+			}
+		}
+	}
+
+	return a
+}
+
+type Logger struct {
+	*slog.Logger
+}
+
 // NewLogger creates a new configured logger instance
 // opts: Variadic list of configuration options
 // Returns: Configured slog.Logger instance
-func NewLogger(opts ...Option) *slog.Logger {
+func NewLogger(opts ...Option) *Logger {
 	config := &Options{
 		LogLevel:       defaultLogLevel,
 		AddSource:      defaultAddSource,
@@ -134,7 +156,38 @@ func NewLogger(opts ...Option) *slog.Logger {
 		slog.SetDefault(logger)
 	}
 
-	return logger
+	return &Logger{
+		Logger: logger,
+	}
+}
+
+// Fatal logs at [LevelFatal]
+func (l *Logger) Fatal(msg string, args ...any) {
+	logWithSkip(nil, l.Logger, 3, LevelFatal, msg, args...)
+
+	os.Exit(1)
+}
+
+// FatalContext logs at [LevelFatal] with the given context
+func (l *Logger) FatalContext(ctx context.Context, msg string, args ...any) {
+	logWithSkip(ctx, l.Logger, 3, LevelFatal, msg, args...)
+
+	os.Exit(1)
+}
+
+func logWithSkip(ctx context.Context, l *slog.Logger, skip int, level Level, msg string, args ...any) {
+	var pcs [1]uintptr
+
+	runtime.Callers(skip, pcs[:])
+
+	r := slog.NewRecord(time.Now(), level, msg, pcs[0])
+	r.Add(args...)
+
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	_ = l.Handler().Handle(ctx, r)
 }
 
 // WithLogLevel sets the minimum log level

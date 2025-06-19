@@ -135,11 +135,11 @@ func Float64Ptr(key string, val *float64) slog.Attr {
 	return slog.Float64(key, *val)
 }
 
-// Error creates an error logging attribute.
+// Err creates an error logging attribute.
 // Handles nil errors by logging "nil" as the error value.
 // err: The error to log
 // Returns: A structured log attribute with key "error"
-func Error(err error) slog.Attr {
+func Err(err error) slog.Attr {
 	if err == nil {
 		return slog.String("error", "nil")
 	}
